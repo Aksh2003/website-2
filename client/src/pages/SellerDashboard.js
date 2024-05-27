@@ -28,7 +28,7 @@ const SellerDashboard = () => {
         console.error('User ID not found');
         return;
       }
-      const { data } = await axios.get('http://localhost:8080/api/properties');
+      const { data } = await axios.get('https://website-2-zvbz.onrender.com/api/properties');
       setProperties(data.properties.filter((property) => property.seller === userId));
     };
     fetchProperties();
@@ -40,7 +40,7 @@ const SellerDashboard = () => {
       console.error('User ID not found');
       return;
     }
-    const { data } = await axios.post('http://localhost:8080/api/properties', {
+    const { data } = await axios.post('https://website-2-zvbz.onrender.com/api/properties', {
       ...newProperty,
       seller: userId,
       email: userEmail,
@@ -74,7 +74,7 @@ const SellerDashboard = () => {
   };
 
   const handleSave = async (propertyId) => {
-    const { data } = await axios.put(`http://localhost:8080/api/properties/${propertyId}`, {
+    const { data } = await axios.put(`https://website-2-zvbz.onrender.com/api/properties/${propertyId}`, {
       ...editedProperty,
       seller: userId,
       email: userEmail,
@@ -86,7 +86,7 @@ const SellerDashboard = () => {
   };
 
   const handleDelete = async (propertyId) => {
-    await axios.delete(`http://localhost:8080/api/properties/${propertyId}`);
+    await axios.delete(`https://website-2-zvbz.onrender.com/api/properties/${propertyId}`);
     setProperties(properties.filter((property) => property._id !== propertyId));
   };
 
