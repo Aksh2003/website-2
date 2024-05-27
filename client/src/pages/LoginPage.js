@@ -32,7 +32,7 @@ const LoginPage = () => {
     }
 
     try {
-      const { data } = await axios.post('http://localhost:8080/api/users/login', { email, password });
+      const { data } = await axios.post('https://website-2-zvbz.onrender.com/api/users/login', { email, password });
       localStorage.setItem('userInfo', JSON.stringify(data));
       if (data.role === 'buyer') {
         navigate('/buyer-dashboard');
