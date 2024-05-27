@@ -13,7 +13,7 @@ const BuyerDashboard = () => {
 
   useEffect(() => {
     const fetchProperties = async () => {
-      const { data } = await axios.get(`http://localhost:8080/api/properties?pageNumber=${page}`);
+      const { data } = await axios.get(`https://website-2-zvbz.onrender.com/api/properties?pageNumber=${page}`);
       setProperties(data.properties);
       setFilteredProperties(data.properties);
       setPages(data.pages);
@@ -32,7 +32,7 @@ const BuyerDashboard = () => {
     }
     try {
       
-      await axios.post(`http://localhost:8080/api/properties/${propertyId}/interest`, { buyerEmail });
+      await axios.post(`https://website-2-zvbz.onrender.com/api/properties/${propertyId}/interest`, { buyerEmail });
       alert(`Contact Seller: ${property.email}`+' Interest registered successfully. Seller\'s contact details sent to your email.');
     } catch (error) {
       console.error('Error registering interest:', error);
@@ -47,7 +47,7 @@ const BuyerDashboard = () => {
       return;
     }
     try {
-      const { data } = await axios.post(`http://localhost:8080/api/properties/${propertyId}/like`);
+      const { data } = await axios.post(`https://website-2-zvbz.onrender.com/api/properties/${propertyId}/like`);
       const updatedProperties = properties.map(property =>
         property._id === propertyId ? { ...property, likes: data.likes } : property
       );
