@@ -5,8 +5,6 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import BuyerDashboard from './pages/BuyerDashboard';
 import SellerDashboard from './pages/SellerDashboard';
-import PropertyPage from './pages/PropertyPage';
-
 const App = () => {
   return (
     <Router>
@@ -15,8 +13,7 @@ const App = () => {
         <Route path='/register' element={<RegisterPage/>} />
         <Route path='/buyer-dashboard' element={<BuyerDashboard/>} />
         <Route path='/seller-dashboard' element={<SellerDashboard/>} />
-        <Route path='/property/:id' element={<PropertyPage/>} />
-      </Routes>
+       </Routes>
     </Router>
   );
 };

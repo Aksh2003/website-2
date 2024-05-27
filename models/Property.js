@@ -11,6 +11,7 @@ const propertySchema = new mongoose.Schema({
   bathrooms: { type: Number, required: true },
   area: { type: Number, required: true },
   nearby: { type: String, required: true },
+  likes: { type: Number, default: 0 }  
 });
 
 const Property = mongoose.model('Property', propertySchema);

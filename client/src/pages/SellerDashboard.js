@@ -14,6 +14,8 @@ const SellerDashboard = () => {
     area: '',
     nearby: '',
   });
+  const [editablePropertyId, setEditablePropertyId] = useState(null);
+  const [editedProperty, setEditedProperty] = useState({});
 
   // Fetch user ID from local storage
   const userInfo = JSON.parse(localStorage.getItem('userInfo'));
@@ -23,12 +25,11 @@ const SellerDashboard = () => {
   useEffect(() => {
     const fetchProperties = async () => {
       if (!userId) {
-        // Handle case where user ID is not available
         console.error('User ID not found');
         return;
       }
       const { data } = await axios.get('http://localhost:8080/api/properties');
-      setProperties(data.filter((property) => property.seller === userId));
+      setProperties(data.properties.filter((property) => property.seller === userId));
     };
     fetchProperties();
   }, [userId]);
@@ -36,16 +37,52 @@ const SellerDashboard = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!userId) {
-      // Handle case where user ID is not available
       console.error('User ID not found');
       return;
     }
     const { data } = await axios.post('http://localhost:8080/api/properties', {
       ...newProperty,
       seller: userId,
-      email:userEmail,
+      email: userEmail,
     });
     setProperties([...properties, data]);
+    setNewProperty({
+      title: '',
+      description: '',
+      location: '',
+      price: '',
+      bedrooms: '',
+      bathrooms: '',
+      area: '',
+      nearby: '',
+    });
+  };
+
+  const handleEdit = (property) => {
+    setEditablePropertyId(property._id);
+    setEditedProperty({
+      title: property.title,
+      description: property.description,
+      location: property.location,
+      price: property.price,
+      bedrooms: property.bedrooms,
+      bathrooms: property.bathrooms,
+      area: property.area,
+      nearby: property.nearby,
+      email: userEmail,  // Include email here
+    });
+  };
+
+  const handleSave = async (propertyId) => {
+    const { data } = await axios.put(`http://localhost:8080/api/properties/${propertyId}`, {
+      ...editedProperty,
+      seller: userId,
+      email: userEmail,
+    });
+    setProperties(properties.map((property) =>
+      property._id === propertyId ? data : property
+    ));
+    setEditablePropertyId(null);
   };
 
   const handleDelete = async (propertyId) => {
@@ -109,14 +146,62 @@ const SellerDashboard = () => {
       <ul className="property-list">
         {properties.map((property) => (
           <li key={property._id} className="property-item">
-            <h2>{property.title}</h2>
-            <p>{property.location}</p>
-            <button className="delete-button" onClick={() => handleDelete(property._id)}>Delete</button>
+            {editablePropertyId === property._id ? (
+              <div className="editable-fields">
+                <input
+                  type='text'
+                  value={editedProperty.title}
+                  onChange={(e) => setEditedProperty({ ...editedProperty, title: e.target.value })}
+                />
+                <textarea
+                  value={editedProperty.description}
+                  onChange={(e) => setEditedProperty({ ...editedProperty, description: e.target.value })}
+                />
+                <input
+                  type='text'
+                  value={editedProperty.location}
+                  onChange={(e) => setEditedProperty({ ...editedProperty, location: e.target.value })}
+                />
+                <input
+                  type='number'
+                  value={editedProperty.price}
+                  onChange={(e) => setEditedProperty({ ...editedProperty, price: e.target.value })}
+                />
+                <input
+                  type='number'
+                  value={editedProperty.bedrooms}
+                  onChange={(e) => setEditedProperty({ ...editedProperty, bedrooms: e.target.value })}
+                />
+                <input
+                  type='number'
+                  value={editedProperty.bathrooms}
+                  onChange={(e) => setEditedProperty({ ...editedProperty, bathrooms: e.target.value })}
+                />
+                <input
+                  type='number'
+                  value={editedProperty.area}
+                  onChange={(e) => setEditedProperty({ ...editedProperty, area: e.target.value })}
+                />
+                <input
+                  type='text'
+                  value={editedProperty.nearby}
+                  onChange={(e) => setEditedProperty({ ...editedProperty, nearby: e.target.value })}
+                />
+                <button onClick={() => handleSave(property._id)}>Save</button>
+                <button onClick={() => setEditablePropertyId(null)}>Cancel</button>
+              </div>
+            ) : (
+              <>
+                <h2>{property.title}</h2>
+                <p>{property.location}</p>
+                <button className="edit-button" onClick={() => handleEdit(property)}>Edit</button>
+                <button className="delete-button" onClick={() => handleDelete(property._id)}>Delete</button>
+              </>
+            )}
           </li>
         ))}
       </ul>
     </div>
   );
 };
-
 export default SellerDashboard;
