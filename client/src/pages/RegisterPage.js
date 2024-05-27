@@ -50,7 +50,7 @@ const RegisterPage = () => {
     }
 
     try {
-      const { data } = await axios.post('http://localhost:8080/api/users/register', {
+      const { data } = await axios.post('https://website-2-zvbz.onrender.com/api/users/register', {
         firstName,
         lastName,
         email,
